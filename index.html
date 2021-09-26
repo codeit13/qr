@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>QR Code Testing</title>
+</head>
+
+<body style="text-align: center;">
+
+  <label class="custom-file-upload" style="border: 1px solid #ccc;display: inline-block;padding: 20px 20px;cursor: pointer;">
+    <input id="camera-input" type="file" accept="image/*" capture="camera" style="display: none;"/> 
+    Open Scanner Camera
+  </label>
+  <p id="result"></p>
+
+
+  <script type="module">
+    import QrScanner from "./qr-scanner.min.js";
+    QrScanner.WORKER_PATH = './qr-scanner-worker.min.js';
+
+    const cameraInput = document.getElementById('camera-input');
+    const resultContainer = document.getElementById('result');
+    cameraInput.addEventListener('change', (e) => handleImage(e.target.files));
+  
+    function handleImage(files) {
+      resultContainer.innerHTML = ""
+      QrScanner.scanImage(files[0])
+        .then(result => { resultContainer.innerHTML = "SUCCESS: " + result; })
+        .catch(error => { resultContainer.innerHTML = "FAIL: " + (error || 'No QR code found.') })
+    }
+  </script>
+</body>
+</html>
